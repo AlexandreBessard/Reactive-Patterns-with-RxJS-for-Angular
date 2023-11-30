@@ -1,4 +1,5 @@
-<div class="rp-data-view" *ngIf="filtredRecipes$ |async as recipes" class="card">
+<!-- Renders the content only if filtredRecipes$ has emitted a value -->
+<div class="rp-data-view" *ngIf="filtredRecipes$ | async as recipes" class="card">
     <p-dataView #dv [value]="recipes" [paginator]="true" [rows]="9" filterBy="name" layout="grid">
         <ng-template let-recipe pTemplate="gridItem">
             <div class="p-col-12 p-md-3">
