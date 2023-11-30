@@ -25,3 +25,14 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+// execute this command if ng serve does not work
+export NODE_OPTIONS=--openssl-legacy-provider
+ng serve --proxy-config proxy.config.json
+
+if issue with the server side:
+npm install -g nodemon
+npm install json-server
+npm run server:start
+
