@@ -7,7 +7,10 @@ import { Recipe } from '../model/recipe.model';
 })
 export class SharedDataService {
 
+  // Multicast the value of the currently selected recipe, which represents the data to be shared
+  // default value is an empty object
   private selectedRecipeSubject = new BehaviorSubject<Recipe>({});
+  // Read-only mode
   selectedRecipeAction$ = this.selectedRecipeSubject.asObservable();
 
   updateSelectedRecipe(recipe: Recipe) {

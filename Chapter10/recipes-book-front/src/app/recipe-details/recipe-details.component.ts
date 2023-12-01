@@ -12,6 +12,7 @@ import { of } from 'rxjs';
 export class RecipeDetailsComponent implements OnInit {
 
   constructor(private sharedService: SharedDataService) { }
+
   selectedRecipe$ = this.sharedService.selectedRecipeAction$;
 
   ngOnInit(): void {
