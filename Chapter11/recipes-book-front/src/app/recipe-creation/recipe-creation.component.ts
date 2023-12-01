@@ -14,8 +14,10 @@ export class RecipeCreationComponent {
   counter: number = 0;
   uploadProgress: number=0;
 
-  constructor(private formBuilder: FormBuilder, private service: RecipesService,
-    private uploadService: UploadRecipesPreviewService) { }
+  constructor(private formBuilder: FormBuilder,
+              private service: RecipesService,
+              private uploadService: UploadRecipesPreviewService) { }
+
   recipeForm = this.formBuilder.group({
     id: Math.floor(1000 + Math.random() * 9000),
     title: [''],
@@ -33,11 +35,16 @@ export class RecipeCreationComponent {
     tap(result => this.saveSuccess(result))
   );
 
+  // initialized with an empty array
   uploadedFilesSubject$ = new BehaviorSubject<File[]>([]);
+
+  // Stream responsible for doing the bulk upload
   uploadRecipeImages$ = this.uploadedFilesSubject$.pipe(
+    // We use switchMap to transform every value emitted by uploadedFilesSubject$ to the Observable that we will build using forkJoin
     switchMap(uploadedFiles => forkJoin(uploadedFiles.map((file: File) =>
       this.uploadService.upload(this.recipeForm.value.id, file).pipe(
         catchError(errors => of(errors)),
+        // finalize -> executed every time an Observable completes or errors out (error occurred)
         finalize(() => this.calculateProgressPercentage(++this.counter, uploadedFiles.length))
       ))))
   )
@@ -46,6 +53,8 @@ export class RecipeCreationComponent {
   }
 
   onUpload(files: File[]) {
+    // emit the last value of the uploaded files
+    // send the last array of the uploaded files
     this.uploadedFilesSubject$.next(files);
   }
 

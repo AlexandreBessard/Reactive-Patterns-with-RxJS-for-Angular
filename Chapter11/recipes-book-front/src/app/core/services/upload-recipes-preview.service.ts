@@ -13,9 +13,9 @@ export class UploadRecipesPreviewService {
   constructor(private http: HttpClient) { }
   /**
    * Uploads the file
-   * @param code 
-   * @param fileToUpload 
-   * @returns 
+   * @param code identifier of the recipe
+   * @param fileToUpload  file to be uploaded
+   * @returns
    */
   upload(code: string, fileToUpload?: File): Observable<UploadStatus> {
     const formData = new FormData()
