@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable, timer } from 'rxjs';
+import {BehaviorSubject, Observable, tap, timer} from 'rxjs';
 import { Recipe } from '../model/recipe.model';
 import { environment } from 'src/environments/environment';
 import { shareReplay, switchMap } from 'rxjs/operators';
 const BASE_PATH = environment.basePath
-const REFRESH_INTERVAL = 50000;
+const REFRESH_INTERVAL = 10000;
 const timer$ = timer(0, REFRESH_INTERVAL);
 
 @Injectable({
@@ -31,10 +31,14 @@ export class RecipesService {
 
   getRecipesList(): Observable<Recipe[]> {
     if (!this.recipes$) {
+      // timer$ used as refresh interval, emit every 50 seconds
       return timer$.pipe(
-      switchMap(_ => this.http.get<Recipe[]>(`${BASE_PATH}/recipes`)),
+        tap(value => console.log(value)),
+      switchMap(value => this.http.get<Recipe[]>(`${BASE_PATH}/recipes`)),
       /**Popular way using shareReplay**/
-      shareReplay(1)
+        // transform cold stream to hot stream
+        // Cache the latest the recipe$ last emission
+        shareReplay(1)
       /**Recommended way using RxJS7+
       share({
         connector : () => new ReplaySubject(),
@@ -45,7 +49,7 @@ export class RecipesService {
     );
     }
     return this.recipes$;
-  } 
+  }
 
 
 }
